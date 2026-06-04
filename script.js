@@ -7,8 +7,13 @@
   var hero = document.getElementById("hero");
   var copyButton = document.getElementById("copy-briefing");
   var copyStatus = document.getElementById("copy-status");
+  var missionAudio = document.getElementById("mission-audio");
+  var audioToggle = document.getElementById("audio-toggle");
+  var audioToggleText = audioToggle ? audioToggle.querySelector("span") : null;
   var introKey = "operacionGoldraIntroSeen";
   var listPrefix = "operacionGoldraChecklist:";
+  var audioKey = "operacionGoldraAudioEnabled";
+  var audioEnabled = storageGet(localStorage, audioKey) !== "false";
 
   document.documentElement.classList.add("intro-ready");
 
@@ -60,10 +65,42 @@
     "Risto Approved."
   ].join("\n");
 
+  function updateAudioToggle() {
+    if (!audioToggle || !audioToggleText) return;
+    audioToggleText.textContent = audioEnabled ? "Música: ON" : "Música: OFF";
+    audioToggle.setAttribute("aria-pressed", audioEnabled ? "true" : "false");
+  }
+
+  function showAudioToggle() {
+    if (!audioToggle) return;
+    audioToggle.classList.add("visible");
+  }
+
+  function hideAudioToggle() {
+    if (!audioToggle) return;
+    audioToggle.classList.remove("visible");
+  }
+
+  function playMissionAudio() {
+    if (!missionAudio || !audioEnabled) return;
+    var playAttempt = missionAudio.play();
+    if (playAttempt && typeof playAttempt.catch === "function") {
+      playAttempt.catch(function () {
+        return false;
+      });
+    }
+  }
+
+  function pauseMissionAudio() {
+    if (!missionAudio) return;
+    missionAudio.pause();
+  }
+
   function hideIntro(shouldScroll) {
     if (!intro) return;
     intro.classList.add("hidden");
     storageSet(sessionStorage, introKey, "true");
+    showAudioToggle();
     if (shouldScroll && hero) {
       window.setTimeout(function () {
         hero.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -75,21 +112,41 @@
     if (!intro) return;
     storageRemove(sessionStorage, introKey);
     intro.classList.remove("hidden");
+    hideAudioToggle();
+    pauseMissionAudio();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  updateAudioToggle();
+
   if (intro && storageGet(sessionStorage, introKey) === "true") {
     intro.classList.add("hidden");
+    showAudioToggle();
   }
 
   if (enterButton) {
     enterButton.addEventListener("click", function () {
       hideIntro(true);
+      playMissionAudio();
     });
   }
 
   if (replayButton) {
     replayButton.addEventListener("click", showIntro);
+  }
+
+  if (audioToggle) {
+    audioToggle.addEventListener("click", function () {
+      audioEnabled = !audioEnabled;
+      storageSet(localStorage, audioKey, audioEnabled ? "true" : "false");
+      updateAudioToggle();
+
+      if (audioEnabled) {
+        playMissionAudio();
+      } else {
+        pauseMissionAudio();
+      }
+    });
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(function (link) {

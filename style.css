@@ -757,6 +757,44 @@ li + li {
   text-transform: uppercase;
 }
 
+.audio-toggle {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 40;
+  min-height: 2.85rem;
+  border: 1px solid rgba(216, 177, 104, 0.72);
+  color: var(--white);
+  background:
+    linear-gradient(90deg, rgba(216, 177, 104, 0.14), transparent 48%),
+    rgba(7, 7, 7, 0.94);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42), inset 0 -3px 0 rgba(0, 0, 0, 0.48);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.75rem 0.9rem;
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.audio-toggle.visible {
+  display: inline-flex;
+}
+
+.audio-toggle i {
+  color: var(--gold);
+}
+
+.audio-toggle[aria-pressed="false"] {
+  color: var(--muted);
+  border-color: rgba(216, 177, 104, 0.42);
+}
+
 @keyframes pulse {
   0% { transform: scale(1); }
   45% { transform: scale(1.025); }
@@ -797,6 +835,13 @@ li + li {
   .map-button {
     min-height: 3.35rem;
     padding: 0.9rem;
+  }
+
+  .audio-toggle {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    min-height: 3rem;
+    padding: 0.75rem 0.85rem;
   }
 }
 

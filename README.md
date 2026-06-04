@@ -45,6 +45,10 @@ git push -u origin main
 
 Edita el enlace del botón `Abrir playlist` en la sección `Playlist oficial de la operación` de `index.html`.
 
+## Música
+
+Coloca el archivo de audio en `assets/intro.mp3`. La música empieza tras pulsar el botón rojo de entrada y se puede pausar o reactivar con el botón flotante. No uses música con derechos si la web se publica públicamente.
+
 ## Cambiar mapas
 
 Edita los botones de la sección `Mapas de misión` en `index.html`. Cada enlace está en el atributo `href` de su botón.
