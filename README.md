@@ -4,6 +4,8 @@ Web estática para una despedida en clave de briefing clasificado. Es una landin
 
 La web está pensada para compartirse por enlace, no para posicionarse ni indexarse.
 
+La información principal está organizada como un panel táctico con acordeones para compactar el briefing y reducir el scroll.
+
 ## Privacidad
 
 La web no usa nombres reales. El novio aparece como `Sujeto raptado` y los grupos aparecen como `Comando Avanzadilla`, `Comando Extracción` y `Comando Primos`. El punto de extracción se mantiene clasificado y no tiene enlace público.
@@ -49,6 +51,8 @@ Edita el enlace del botón `Abrir playlist` en la sección `Playlist oficial de 
 
 Coloca el archivo de audio en `assets/intro.mp3`. La música empieza tras pulsar el botón rojo de entrada y se puede pausar o reactivar con el botón flotante. No uses música con derechos si la web se publica públicamente.
 
+La playlist oficial es un enlace externo a YouTube Music dentro de su propio acordeón. No se reproduce automáticamente ni se mezcla con el audio de fondo `assets/intro.mp3`.
+
 ## Cambiar mapas
 
 Edita los botones de la sección `Mapas de misión` en `index.html`. Cada enlace está en el atributo `href` de su botón.
@@ -68,3 +72,7 @@ Edita la sección `Planning operativo` en `index.html`.
 ## Pantalla inicial
 
 Al cargar la web aparece una entrada clasificada con el emblema `parche_risto.jpeg` y un botón rojo. Al pulsarlo, se guarda la entrada en `sessionStorage` para no repetirla durante la misma sesión. En el footer hay un botón `Repetir entrada` que limpia ese estado y vuelve a mostrar la pantalla inicial.
+
+## Estado local
+
+La intro se recuerda con `sessionStorage`. Las checklists, la preferencia de música y el estado de los acordeones se guardan con `localStorage`.

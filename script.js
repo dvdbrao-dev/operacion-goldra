@@ -13,6 +13,7 @@
   var introKey = "operacionGoldraIntroSeen";
   var listPrefix = "operacionGoldraChecklist:";
   var audioKey = "operacionGoldraAudioEnabled";
+  var accordionPrefix = "operacionGoldraAccordion:";
   var audioEnabled = storageGet(localStorage, audioKey) !== "false";
 
   document.documentElement.classList.add("intro-ready");
@@ -155,6 +156,66 @@
       if (!target) return;
       event.preventDefault();
       target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  function setAccordionOpen(accordion, isOpen, shouldStore) {
+    var trigger = accordion.querySelector(".accordion-trigger");
+    var content = accordion.querySelector(".accordion-content");
+    var state = accordion.querySelector(".accordion-state");
+    var key = accordion.dataset.accordion;
+
+    accordion.classList.toggle("open", isOpen);
+    if (trigger) {
+      trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+    if (state) {
+      state.textContent = isOpen ? "DOSSIER ABIERTO" : "ABRIR DOSSIER";
+    }
+    if (content) {
+      content.style.maxHeight = isOpen ? content.scrollHeight + "px" : "0px";
+    }
+    if (shouldStore && key) {
+      storageSet(localStorage, accordionPrefix + key, isOpen ? "open" : "closed");
+    }
+  }
+
+  function openAccordionById(id, shouldScroll) {
+    var accordion = document.getElementById(id);
+    if (!accordion || !accordion.classList.contains("accordion")) return;
+    setAccordionOpen(accordion, true, true);
+    if (shouldScroll) {
+      window.setTimeout(function () {
+        accordion.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 40);
+    }
+  }
+
+  document.querySelectorAll(".accordion").forEach(function (accordion) {
+    var key = accordion.dataset.accordion;
+    var savedState = key ? storageGet(localStorage, accordionPrefix + key) : null;
+    var isDefaultOpen = accordion.classList.contains("open");
+    var isOpen = savedState ? savedState === "open" : isDefaultOpen;
+    var trigger = accordion.querySelector(".accordion-trigger");
+
+    setAccordionOpen(accordion, isOpen, false);
+
+    if (trigger) {
+      trigger.addEventListener("click", function () {
+        setAccordionOpen(accordion, !accordion.classList.contains("open"), true);
+      });
+    }
+  });
+
+  document.querySelectorAll("[data-open-accordion]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      openAccordionById(button.dataset.openAccordion, true);
+    });
+  });
+
+  window.addEventListener("resize", function () {
+    document.querySelectorAll(".accordion.open .accordion-content").forEach(function (content) {
+      content.style.maxHeight = content.scrollHeight + "px";
     });
   });
 
